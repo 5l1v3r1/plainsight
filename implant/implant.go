@@ -62,5 +62,6 @@ ForLoop:
 	}
 	fmt.Println("[+] Converting A values...")
 	data, _ := base64.StdEncoding.DecodeString(b64str)
+	fmt.Println(data)
 	runInMem("PLAINSIGHT", data)
 }
