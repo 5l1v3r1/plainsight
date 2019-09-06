@@ -27,11 +27,12 @@ func aToChar(a int) string {
 func runInMem(displayName string, buffer []byte) {
 	fdName := "" // *string cannot be initialized
 	fmt.Println("[+] Creating syscall...")
-	fd, _, _ := syscall.Syscall(uintptr(memfdCreate), uintptr(unsafe.Pointer(&fdName)), uintptr(mfdCloexec), uintptr(0))
-	syscall.Write(int(fd), buffer)
+	fd, _, _ := syscall.Syscall(memfdCreate, uintptr(unsafe.Pointer(&fdName)), uintptr(mfdCloexec), 0)
+	_, _ = syscall.Write(int(fd), buffer)
+
 	fdPath := fmt.Sprintf("/proc/self/fd/%d", fd)
 	fmt.Println("[+] Executing...")
-	syscall.Exec(fdPath, []string{displayName}, nil)
+	_ = syscall.Exec(fdPath, []string{displayName}, nil)
 }
 
 func main() {
